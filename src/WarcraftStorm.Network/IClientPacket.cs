@@ -2,7 +2,7 @@ namespace WarcraftStorm.Network;
 
 public interface IClientPacket
 {
-    void ReadData();
+    void ReadData(Stream stream);
     void Execute();
 
 }

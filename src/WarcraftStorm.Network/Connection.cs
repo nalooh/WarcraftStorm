@@ -7,7 +7,7 @@ public class Connection(ILogger logger, TcpClient client, IPacketHandler packetH
 {
     public string ClientAddress => String.Format("{0}", client.Client.RemoteEndPoint);
 
-    internal NetworkStream Stream => client.GetStream();
+    internal NetworkStream Stream { get; } = client.GetStream();
 
     protected IPacketHandler PacketHandler { get; } = packetHandler;
 
@@ -23,7 +23,7 @@ public class Connection(ILogger logger, TcpClient client, IPacketHandler packetH
     public void ReceivePacket(IClientPacket packet)
     {
         logger.LogInformation("[{client}] RECEIVED {packet}", ClientAddress, packet);
-        packet.ReadData();
+        packet.ReadData(Stream);
         packet.Execute();
     }
 

@@ -11,7 +11,7 @@ public static class ServiceCollectionWarcraftStormExtensions
         {
             options.Port = port;
         });
-        services.AddSingleton<IConnectionFactory, TConnectionFactory>();
+        services.AddScoped<IConnectionFactory, TConnectionFactory>();
         services.AddHostedService<ConnectionHandler>();
 
         return services;

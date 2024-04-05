@@ -2,22 +2,23 @@ using Microsoft.Extensions.Logging;
 
 namespace WarcraftStorm.Network;
 
-public abstract class PacketHandler<TOpcode>(ILogger logger) : IPacketHandler
+public abstract class PacketHandler<TOpCode>(ILogger logger) : IPacketHandler
+where TOpCode : struct
 {
-    private readonly Dictionary<TOpcode, Type> _packetTypes = [];
+    protected readonly Dictionary<TOpCode, Type> _packetTypes = [];
 
     public void HandlePacket(Connection connection)
     {
-        TOpcode opcode = GetOpCodeFromStream(connection.Stream);
+        TOpCode opcode = GetOpCodeFromStream(connection.Stream);
         if(!_packetTypes.ContainsKey(opcode))
         {
-            logger.LogError("[{client}] UNKNOWN PACKET 0x{opcode:X2}", connection.ClientAddress, opcode);
+            logger.LogError("[{client}] UNKNOWN PACKET 0x{opcode:X}", connection.ClientAddress, opcode);
             return;
         }
         ExecutePacketType(_packetTypes[opcode], connection);
     }
 
-    protected abstract TOpcode GetOpCodeFromStream(Stream stream);
+    protected abstract TOpCode GetOpCodeFromStream(Stream stream);
 
     protected void ExecutePacketType(Type packetType, Connection connection)    
     {
