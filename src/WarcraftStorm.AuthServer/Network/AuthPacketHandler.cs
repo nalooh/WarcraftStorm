@@ -9,6 +9,7 @@ internal class AuthPacketHandler : PacketHandler<AuthCommands>
     {
         _packetTypes.Add(AuthCommands.AUTH_LOGON_CHALLENGE, typeof(CLIENT_AUTH_CHALLENGE));
         _packetTypes.Add(AuthCommands.AUTH_LOGON_PROOF, typeof(CLIENT_AUTH_PROOF));
+        _packetTypes.Add(AuthCommands.REALM_LIST, typeof(CLIENT_REALMLIST_REQUEST));
     }
 
     protected override AuthCommands GetOpCodeFromStream(Stream stream)

@@ -7,4 +7,5 @@ public enum AuthCommands : byte
     AUTH_RECONNECT_CHALLENGE = 0x02,
     AUTH_RECONNECT_PROOF = 0x03,
     REALM_LIST = 0x10,
+
 }
