@@ -7,8 +7,8 @@ internal class SERVER_AUTH_FAIL(AuthConnection connection, AuthResult result) : 
 {
     public byte[] GetData()
     {
-        MemoryStream ms = new MemoryStream();
-        BinaryWriter writer = new BinaryWriter(ms);
+        MemoryStream ms = new();
+        BinaryWriter writer = new(ms);
         writer.Write((byte)AuthCommands.AUTH_LOGON_CHALLENGE);
         writer.Write((byte)0);
         writer.Write((byte)result);

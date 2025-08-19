@@ -13,9 +13,9 @@ internal class ConnectionHandler(ILogger<ConnectionHandler> logger, IServiceProv
     {
         IConnectionFactory connectionFactory = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IConnectionFactory>();
 
-        TcpListener server = new TcpListener(IPAddress.Any, options.Value.Port);
+        TcpListener server = new(IPAddress.Any, options.Value.Port);
         server.Start();
-        while(!stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
             TcpClient client = await server.AcceptTcpClientAsync(stoppingToken);
             Connection connection = connectionFactory.CreateConnection(client);
@@ -24,4 +24,5 @@ internal class ConnectionHandler(ILogger<ConnectionHandler> logger, IServiceProv
         }
         server.Stop();
     }
+
 } 

@@ -9,4 +9,5 @@ public enum AuthResult : byte
 	FAIL_ALREADY_ONLINE = 0x06,
 	FAIL_VERSION_INVALID = 0x09,
 	FAIL_LOCKED = 0x10,
+	
 }

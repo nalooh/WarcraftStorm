@@ -6,7 +6,7 @@ namespace WarcraftStorm.AuthServer.Network;
 
 internal class AuthConnection(ILogger logger, TcpClient client, AuthPacketHandler packetHandler, RealmsDbContext db) : Connection(logger, client, packetHandler)
 {
-    public RealmsDbContext Db { get; private set; } = db;
+    public RealmsDbContext Db { get; } = db;
 
     public AuthConnectionState State { get; internal set; } = AuthConnectionState.Connected;
 

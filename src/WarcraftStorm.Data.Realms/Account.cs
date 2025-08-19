@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
@@ -22,7 +21,7 @@ public class Account
     public bool IsLocked { get; set; } = false;
 
     [Column("AccountSalt")]
-    public byte[]? Salt { get; set; }
+    public byte[]? Salt { get; set; }
 
     [Column("AccountVerifier")]
     public byte[]? Verifier { get; set; }
@@ -32,6 +31,7 @@ public class Account
 
     public void SetUserPassword(string password)
     {
-        Password = SHA1.Create().ComputeHash(Encoding.ASCII.GetBytes(String.Format("{0}:{1}", UserName.ToUpper(), password.ToUpper())));
+        Password = SHA1.HashData(Encoding.ASCII.GetBytes($"{UserName.ToUpper()}:{password.ToUpper()}"));
     }
+    
 }

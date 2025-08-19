@@ -7,8 +7,6 @@ namespace WarcraftStorm.AuthServer.Packets;
 
 internal class SERVER_REALMLIST_RESPONSE(AuthConnection connection) : IServerPacket
 {
-    private readonly RealmsDbContext db = connection.Db;
-
     public byte[] GetData()
     {
         MemoryStream ms = new();
@@ -25,16 +23,16 @@ internal class SERVER_REALMLIST_RESPONSE(AuthConnection connection) : IServerPac
     {
         MemoryStream ms = new();
         BinaryWriter writer = new(ms);
-        writer.Write((UInt32)0);
-        writer.Write((byte)db.Realms.Count());
-        foreach (Realm current in db.Realms)
+        writer.Write((uint)0);
+        writer.Write((byte)connection.Db.Realms.Count());
+        foreach (Realm current in connection.Db.Realms)
         {
-            writer.Write((UInt32)(byte)current.Type);
+            writer.Write((uint)(byte)current.Type);
             writer.Write((byte)current.Flags);
             WriteCString(current.Name, writer);
             WriteCString(current.AddressString, writer);
             writer.Write((float)0f);
-            writer.Write((byte)db.Characters.Where(ch => ch.AccountId == connection.Account.Id).Count());
+            writer.Write((byte)connection.Db.Characters.Where(ch => ch.AccountId == connection.Account.Id).Count());
             writer.Write((byte)current.Timezone);
             writer.Write((byte)0);
         }
@@ -47,4 +45,5 @@ internal class SERVER_REALMLIST_RESPONSE(AuthConnection connection) : IServerPac
         writer.Write(Encoding.ASCII.GetBytes(text));
         writer.Write((byte)0);
     }
+    
 }

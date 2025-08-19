@@ -35,7 +35,7 @@ public class SRP6 : IDisposable
 
     public SRP6()
     {
-        Sha1 = new SHA1Managed();
+        Sha1 = SHA1.Create();
         N =
         [
             137, 75,  100, 94,  137, 225, 83,  91,
@@ -90,7 +90,7 @@ public class SRP6 : IDisposable
 
     public void CalculateK()
     {
-        byte[] bytes = this.GetBytes(this.s.ToByteArray(), 32);
+        byte[] bytes = GetBytes(s.ToByteArray(), 32);
         byte[] array = new byte[bytes.Length / 2];
         byte[] array2 = new byte[bytes.Length / 2];
         for (int i = 0; i < array.Length; i++)
@@ -98,19 +98,19 @@ public class SRP6 : IDisposable
             array[i] = bytes[i * 2];
             array2[i] = bytes[i * 2 + 1];
         }
-        array = this.Sha1.ComputeHash(array);
-        array2 = this.Sha1.ComputeHash(array2);
-        this.K = new byte[array.Length + array2.Length];
+        array = Sha1.ComputeHash(array);
+        array2 = Sha1.ComputeHash(array2);
+        K = new byte[array.Length + array2.Length];
         for (int j = 0; j < array.Length; j++)
         {
-            this.K[j * 2] = array[j];
-            this.K[j * 2 + 1] = array2[j];
+            K[j * 2] = array[j];
+            K[j * 2 + 1] = array2[j];
         }
     }
 
     public void CalculateM2(byte[] m1)
     {
-        this.M2 = this.Sha1.ComputeHash(this.CombineData(this.CombineData(this.GetBytes(this.A.ToByteArray(), 32), m1), this.K));
+        M2 = Sha1.ComputeHash(CombineData(CombineData(GetBytes(A.ToByteArray(), 32), m1), K));
     }
 
     public byte[] GetBytes(byte[] data, int count = 32)
@@ -127,7 +127,7 @@ public class SRP6 : IDisposable
     public BigInteger MakeBigInteger(byte[] data)
     {
         byte[] data2 = new byte[1];
-        return new BigInteger(this.CombineData(data, data2));
+        return new BigInteger(CombineData(data, data2));
     }
 
     public byte[] CombineData(byte[] data, byte[] data2)
@@ -137,8 +137,8 @@ public class SRP6 : IDisposable
 
     public void Dispose()
     {
-        this.K = null;
-        this.M2 = null;
+        K = null;
+        M2 = null;
     }
     
 }

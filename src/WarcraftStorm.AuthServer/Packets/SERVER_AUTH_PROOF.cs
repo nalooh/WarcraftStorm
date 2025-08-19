@@ -7,8 +7,8 @@ namespace WarcraftStorm.AuthServer.Packets
 	{
           public byte[] GetData()
         {
-            MemoryStream ms = new MemoryStream();
-            BinaryWriter writer = new BinaryWriter(ms);
+            MemoryStream ms = new();
+            BinaryWriter writer = new(ms);
             WritePacketData(writer);
             ms.Seek(0, SeekOrigin.Begin);
             return ms.ToArray();

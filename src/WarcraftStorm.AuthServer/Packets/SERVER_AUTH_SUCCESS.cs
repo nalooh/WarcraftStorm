@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using WarcraftStorm.Data.Realms;
 using WarcraftStorm.AuthServer.Network;
 using WarcraftStorm.Network;
 
@@ -9,8 +8,8 @@ internal class SERVER_AUTH_SUCCESS(AuthConnection connection) : IServerPacket
 {
     public byte[] GetData()
     {
-        MemoryStream ms = new MemoryStream();
-        BinaryWriter writer = new BinaryWriter(ms);
+        MemoryStream ms = new();
+        BinaryWriter writer = new(ms);
         WritePacketData(writer);
         ms.Seek(0, SeekOrigin.Begin);
         return ms.ToArray();
@@ -27,11 +26,10 @@ internal class SERVER_AUTH_SUCCESS(AuthConnection connection) : IServerPacket
             connection.Account.Salt = connection.Account.SecureRemotePassword.Salt;
             connection.Account.Verifier = connection.Account.SecureRemotePassword.V;
 
-            RealmsDbContext db = connection.Db;
-            var account = db.Accounts.Find(connection.Account.Id);
+            var account = connection.Db.Accounts.Find(connection.Account.Id);
             account.Salt = connection.Account.Salt;
             account.Verifier = connection.Account.Verifier;
-            db.SaveChanges();
+            connection.Db.SaveChanges();
         }
         byte[] array = new byte[16];
         RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
@@ -45,4 +43,5 @@ internal class SERVER_AUTH_SUCCESS(AuthConnection connection) : IServerPacket
         writer.Write(array);
         writer.Write((byte)0);
     }
+    
 }
